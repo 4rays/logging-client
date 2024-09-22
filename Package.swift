@@ -1,5 +1,4 @@
-// swift-tools-version: 5.10
-// The swift-tools-version declares the minimum version of Swift required to build this package.
+// swift-tools-version: 6.0
 
 import PackageDescription
 
@@ -20,7 +19,8 @@ let package = Package(
   ],
   dependencies: [
     .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.3.9"),
-    .package(url: "https://github.com/sushichop/Puppy", from: "0.7.0"),
+    .package(url: "https://github.com/apple/swift-log", from: "1.6.0"),
+    .package(url: "https://github.com/4rays/swift-file-logger", from: "0.9.1"),
   ],
   targets: [
     // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -30,12 +30,14 @@ let package = Package(
       dependencies: [
         .product(name: "Dependencies", package: "swift-dependencies"),
         .product(name: "DependenciesMacros", package: "swift-dependencies"),
-        .product(name: "Puppy", package: "Puppy"),
+        .product(name: "Logging", package: "swift-log"),
+        .product(name: "FileLogger", package: "swift-file-logger"),
       ]
     ),
     .testTarget(
       name: "LoggingClientTests",
       dependencies: ["LoggingClient"]
     ),
-  ]
+  ],
+  swiftLanguageModes: [.v6]
 )

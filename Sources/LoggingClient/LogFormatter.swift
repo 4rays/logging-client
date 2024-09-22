@@ -1,5 +1,5 @@
-import Puppy
 import Foundation
+import Logging
 
 extension String {
   var fileURL: URL {
@@ -15,50 +15,33 @@ extension String {
   }
 }
 
-public struct LogFormatter: LogFormattable {
-  public init() {}
-  
-  public func formatMessage(
-    _ level: LogLevel,
-    message: String,
-    tag: String,
-    function: String,
-    file: String,
-    line: UInt,
-    swiftLogInfo: [String : String],
-    label: String,
-    date: Date,
-    threadID: UInt64
-  ) -> String {
-    let date = dateFormatter(date, withFormatter: .init(), dateFormat: "yyyy-MM-dd' | 'HH:mm:ssZZZZZ")
-    let file = file.lastPathComponent
+public func formatMessage(
+  _ level: Logger.Level,
+  message: String,
+  function: String,
+  file: String,
+  line: UInt,
+  date: Date
+) -> String {
+  let dateString = date.formatted(date: .numeric, time: .complete)
+  let file = file.lastPathComponent
 #if DEBUG
-    return "\(date) \(level.customEmoji) [\(level)] [\(file)@L\(line) \(function) <thread:\(threadID)>] \(message)"
+  return "\(dateString) \(level.customEmoji) [\(level.rawValue.uppercased())] [\(file)@L\(line) \(function)] \(message)"
 #else
-    return "\(date) \(level.customEmoji) [\(level)] \(message)"
+  return "\(date) \(level.customEmoji) [\(level)] \(message)"
 #endif
-  }
 }
 
-extension LogLevel {
+extension Logger.Level {
   public var customEmoji: String {
     switch self {
-    case .trace:
-      return "🔲"
-    case .verbose:
-      return "🔳"
-    case .debug:
-      return "🟪"
-    case .info:
-      return "🟦"
-    case .notice:
-      return "⬜️"
-    case .warning:
-      return "🟨"
-    case .error:
-      return "🟥"
-    case .critical:
-      return "🟧"
+    case .trace: "🛞"
+    case .debug: "🟣"
+    case .info: "🔵"
+    case .notice: "⚪"
+    case .warning: "🟡"
+    case .error: "🔴"
+    case .critical: "⭕"
     }
   }
 }
