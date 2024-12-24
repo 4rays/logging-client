@@ -3,64 +3,65 @@ import DependenciesMacros
 import FileLogger
 import Foundation
 import Logging
+import PulseLogHandler
 
 @DependencyClient
 public struct LoggingClient: Sendable {
   public var logTrace:
-  @Sendable (
-    _ message: String,
-    _ function: String,
-    _ file: String,
-    _ line: UInt
-  ) async throws -> Void
+    @Sendable (
+      _ message: String,
+      _ function: String,
+      _ file: String,
+      _ line: UInt
+    ) async throws -> Void
 
   public var logDebug:
-  @Sendable (
-    _ message: String,
-    _ function: String,
-    _ file: String,
-    _ line: UInt
-  ) async throws -> Void
+    @Sendable (
+      _ message: String,
+      _ function: String,
+      _ file: String,
+      _ line: UInt
+    ) async throws -> Void
 
   public var logInfo:
-  @Sendable (
-    _ message: String,
-    _ function: String,
-    _ file: String,
-    _ line: UInt
-  ) async throws -> Void
+    @Sendable (
+      _ message: String,
+      _ function: String,
+      _ file: String,
+      _ line: UInt
+    ) async throws -> Void
 
   public var logNotice:
-  @Sendable (
-    _ message: String,
-    _ function: String,
-    _ file: String,
-    _ line: UInt
-  ) async throws -> Void
+    @Sendable (
+      _ message: String,
+      _ function: String,
+      _ file: String,
+      _ line: UInt
+    ) async throws -> Void
 
   public var logWarning:
-  @Sendable (
-    _ message: String,
-    _ function: String,
-    _ file: String,
-    _ line: UInt
-  ) async throws -> Void
+    @Sendable (
+      _ message: String,
+      _ function: String,
+      _ file: String,
+      _ line: UInt
+    ) async throws -> Void
 
   public var logError:
-  @Sendable (
-    _ message: String,
-    _ function: String,
-    _ file: String,
-    _ line: UInt
-  ) async throws -> Void
+    @Sendable (
+      _ message: String,
+      _ function: String,
+      _ file: String,
+      _ line: UInt
+    ) async throws -> Void
 
   public var logCritical:
-  @Sendable (
-    _ message: String,
-    _ function: String,
-    _ file: String,
-    _ line: UInt
-  ) async throws -> Void
+    @Sendable (
+      _ message: String,
+      _ function: String,
+      _ file: String,
+      _ line: UInt
+    ) async throws -> Void
 }
 
 extension LoggingClient {
@@ -162,6 +163,7 @@ extension LoggingClient: DependencyKey {
 
     LoggingSystem.bootstrap { label in
       let consoleLogHandler = StreamLogHandler.standardOutput(label: label)
+      let pulseLogHandler = PersistentLogHandler(label: label)
 
       do {
         let fileLogHandler = try FileLogger(
@@ -170,11 +172,11 @@ extension LoggingClient: DependencyKey {
           maxFileSize: try config.maxLogFileSize()
         )
 
-#if DEBUG
-        return MultiplexLogHandler([consoleLogHandler, fileLogHandler])
-#else
-        return fileLogHandler
-#endif
+        #if DEBUG
+          return MultiplexLogHandler([consoleLogHandler, fileLogHandler, pulseLogHandler])
+        #else
+          return fileLogHandler
+        #endif
       } catch {
         return consoleLogHandler
       }

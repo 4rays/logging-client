@@ -5,10 +5,10 @@ import PackageDescription
 let package = Package(
   name: "LoggingClient",
   platforms: [
-    .macOS(.v12),
-    .iOS(.v16),
-    .watchOS(.v8),
-    .tvOS(.v16),
+    .macOS(.v13),
+    .iOS(.v17),
+    .watchOS(.v10),
+    .tvOS(.v17),
   ],
   products: [
     // Products define the executables and libraries a package produces, making them visible to other packages.
@@ -18,9 +18,11 @@ let package = Package(
     )
   ],
   dependencies: [
-    .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.3.9"),
+    .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "1.17.0"),
+    .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.6.0"),
     .package(url: "https://github.com/apple/swift-log", from: "1.6.0"),
     .package(url: "https://github.com/4rays/swift-file-logger", from: "0.9.1"),
+    .package(url: "https://github.com/kean/PulseLogHandler", from: "5.1.0"),
   ],
   targets: [
     // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -32,6 +34,8 @@ let package = Package(
         .product(name: "DependenciesMacros", package: "swift-dependencies"),
         .product(name: "Logging", package: "swift-log"),
         .product(name: "FileLogger", package: "swift-file-logger"),
+        .product(name: "PulseLogHandler", package: "PulseLogHandler"),
+        .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
       ]
     ),
     .testTarget(
