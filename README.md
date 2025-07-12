@@ -1,6 +1,7 @@
-# LoggingClient
+# 🪻 logging-client
 
 A dependency client that handles file logs in apps using the Swift Composable Architecture (TCA).
+It is part of the [Indigo Stack](https://indigostack.org).
 
 ## Usage
 
@@ -25,3 +26,7 @@ extension LoggingConfigClient: DependencyValue {
 
 The default value uses a `LoggingClient` label, saves the log files in the caches
 directory, and caps the size of a logs file to 10mb.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details
