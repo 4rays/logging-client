@@ -23,15 +23,20 @@ func messageFormatter(_ level: Logger.Level) {
 @Test func messageFormatterStandard() {
   let date = Date(timeIntervalSince1970: 0)
 
+  // Generate expected date string using the same formatting as formatMessage
+  // This ensures consistency across different locales and timezones
+  let expectedDateString = date.formatted(date: .numeric, time: .complete)
+  let lineNumber = #line + 7  // Line number where formatMessage is called within #expect
+
   #expect(
     formatMessage(
       .info,
       message: "Test message.",
       function: #function,
       file: #file,
-      line: #line,
+      line: UInt(lineNumber),
       date: date
     )
-      == "1970-01-01, 1:00:00 GMT+1 🔵 [INFO] [LoggingClientTests.swift@L26 messageFormatterStandard()] Test message."
+      == "\(expectedDateString) 🔵 [INFO] [LoggingClientTests.swift@L\(lineNumber) messageFormatterStandard()] Test message."
   )
 }
